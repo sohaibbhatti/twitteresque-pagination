@@ -1,21 +1,25 @@
-function triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container){
+function triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container, additionalParams){
   container = (typeof container == 'undefined')? '.results' : container;
+  
+  additionalParams = (typeof additionalParams == 'undefined')? {} : additionalParams;
+  additionalParams.page = pageNum;
+
   nextPage = pageNum + 1;
   if (triggerComparator(threshold, container)){
     if (pageNum<=maxPages){
       pageRequest = pageUrl.concat('.js');
-      $.get(pageRequest, {page: pageNum});
+      $.get(pageRequest, additionalParams);
     }
     if (nextPage<=maxPages){
       $(document).ajaxComplete(function(){
-        triggerPagination(pageUrl, nextPage, maxPages, threshold, timeoutValue, container);
+        triggerPagination(pageUrl, nextPage, maxPages, threshold, timeoutValue, container, additionalParams);
       });
     }
   }
   else{
     window.setTimeout(
       function(){
-        triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container);
+        triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container, additionalParams);
       },
       300
     );
@@ -33,4 +37,3 @@ function calculateScrollerPosition(container){
 function divHeight(container){
   return ($(container).position().top + $(container).height());
 }
-
