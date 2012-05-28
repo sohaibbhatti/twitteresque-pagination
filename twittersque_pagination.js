@@ -1,25 +1,26 @@
-function triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container, additionalParams){
+// Sohaib Talaat Bhatti
+function triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container, additional_params){
   container = (typeof container == 'undefined')? '.results' : container;
   
-  additionalParams = (typeof additionalParams == 'undefined')? {} : additionalParams;
-  additionalParams.page = pageNum;
+  additional_params = (typeof additional_params == 'undefined')? {} : additional_params;
+  additional_params.page = pageNum;
 
   nextPage = pageNum + 1;
   if (triggerComparator(threshold, container)){
     if (pageNum<=maxPages){
       pageRequest = pageUrl.concat('.js');
-      $.get(pageRequest, additionalParams);
+      $.get(pageRequest, additional_params);
     }
     if (nextPage<=maxPages){
       $(document).ajaxComplete(function(){
-        triggerPagination(pageUrl, nextPage, maxPages, threshold, timeoutValue, container, additionalParams);
+        triggerPagination(pageUrl, nextPage, maxPages, threshold, timeoutValue, container, additional_params);
       });
     }
   }
   else{
     window.setTimeout(
       function(){
-        triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container, additionalParams);
+        triggerPagination(pageUrl, pageNum, maxPages, threshold, timeoutValue, container, additional_params);
       },
       300
     );
